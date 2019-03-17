@@ -1,0 +1,128 @@
+<tmfxml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../org.eclipse.tracecompass.tmf.analysis.xml.core/src/org/eclipse/tracecompass/tmf/analysis/xml/core/module/xmlDefinition.xsd">
+    <timeGraphView id="my.test.time.graph.view.javathreads">
+        <head>
+            <analysis id="org.eclipse.tracecompass.incubator.java.analysis.core.javaanalysismodule" />
+            <label value="Java Threads View" />
+        </head>
+		
+		<definedValue name="VM Operation" value="1" color="#320048" />
+		<definedValue name="GC Operation" value="2" color="#a000e3" />
+		<definedValue name="Compiler Operation" value="3" color="#fbff3d" />
+		<definedValue name="Running" value="5" color="#2ca25f" />
+		<definedValue name="Sleeping" value="225" color="#3a24ff" />
+		<definedValue name="Wait" value="401" color="#ADD8E6" />
+		<definedValue name="TimedWait" value="417" color="#ADD8E6" />
+		<definedValue name="WaitPark" value="657" color="#D3D3D3" />
+		<definedValue name="TimedWaitPark" value="673" color="#D3D3D3" />
+		<definedValue name="Blocked" value="1025" color="#ff1818" />
+
+
+		<definedValue name="Running" value="1001" color="#00C800" />
+		<definedValue name="Wait Blocked" value="1002" color="#C8C800" />
+		<definedValue name="Other Process" value="1003" color="#ccffcc" />
+
+		<entry path="*">
+		<display type="self"/>
+		<entry path="JavaThreads">
+			<display type="self"/>
+			<entry path="*" displayText="true">
+				<display type="self"/>
+				<name type="constant" value="name"/>
+				<entry path="User Status" displayText="true">
+					<display type="self"/>
+				</entry>
+				<entry path="Contended" displayText="true">
+					<display type="self"/>
+				</entry>
+				<entry path="Monitor" displayText="true">
+					<display type="self"/>
+				</entry>
+				<entry path="Kernel Status">
+					<display type="self"/>
+				</entry>
+			</entry>
+        </entry>
+		</entry>
+
+		<entry path="*">
+		<display type="self"/>
+		<entry path="VMThreads">
+			<display type="self"/>
+			<entry path="*" displayText="true">
+				<display type="self"/>
+				<name type="constant" value="name"/>
+				<entry path="User Status" displayText="true">
+					<display type="self"/>
+				</entry>
+				<entry path="info" displayText="true">
+					<display type="self"/>
+				</entry>
+				<entry path="Kernel Status">
+					<display type="self"/>
+				</entry>
+			</entry>
+        </entry>
+		</entry>
+
+		<entry path="*">
+		<display type="self"/>
+		<entry path="GCThreads" displayText="true">
+			<display type="self"/>
+			<entry path="*" displayText="true">
+				<display type="self"/>
+				<name type="constant" value="name"/>
+				<entry path="User Status" displayText="true">
+					<display type="self"/>
+				</entry>
+				<entry path="info" displayText="true">
+					<display type="self"/>
+				</entry>
+				<entry path="Kernel Status">
+					<display type="self"/>
+				</entry>
+			</entry>
+        </entry>
+		</entry>
+
+		<entry path="*">
+		<display type="self"/>
+		<entry path="CompilerThreads">
+			<display type="self"/>
+			<entry path="*" displayText="true">
+				<display type="self"/>
+				<name type="constant" value="name"/>
+				<entry path="User Status" displayText="true">
+					<display type="self"/>
+				</entry>
+				<entry path="info" displayText="true">
+					<display type="self"/>
+				</entry>
+				<entry path="Kernel Status">
+					<display type="self"/>
+				</entry>
+			</entry>
+        </entry>
+		</entry>
+    </timeGraphView>
+
+    <timeGraphView id="my.test.time.graph.view.cpuUsage">
+        <head>
+            <analysis id="org.eclipse.tracecompass.incubator.java.analysis.core.javaanalysismodule" />
+            <label value="Java CPU" />
+        </head>
+
+
+		<definedValue name="Java Thread" value="1001" color="#2ca25f" />
+		<definedValue name="VM Thread" value="1002" color="#320048" />
+		<definedValue name="GC Thread" value="1003" color="#a000e3" />
+		<definedValue name="Compiler Thread" value="1004" color="#ff0000" />
+		<definedValue name="Other Process" value="1005" color="#ccffcc" />
+
+		<entry path="CPUs">
+			<display type="self"/>
+			<entry path="*" displayText="true">
+				<display type="constant" value="status"/>
+			</entry>
+		</entry>
+    </timeGraphView>
+</tmfxml>
