@@ -65,23 +65,31 @@
 		</entry>
 
 		<entry path="*">
-		<display type="self"/>
-		<entry path="GCThreads" displayText="true">
 			<display type="self"/>
-			<entry path="*" displayText="true">
-				<display type="self"/>
-				<name type="constant" value="name"/>
-				<entry path="User Status" displayText="true">
+			<entry path="GC" displayText="true">
+				<entry path="Collections" displayText="true">
 					<display type="self"/>
+					<entry path="*" displayText="true">
+						<display type="self"/>
+					</entry>
 				</entry>
-				<entry path="info" displayText="true">
+				<entry path="GCThreads" displayText="true">
 					<display type="self"/>
-				</entry>
-				<entry path="Kernel Status">
-					<display type="self"/>
-				</entry>
+					<entry path="*" displayText="true">
+						<display type="self"/>
+						<name type="constant" value="name"/>
+						<entry path="User Status" displayText="true">
+							<display type="self"/>
+						</entry>
+						<entry path="info" displayText="true">
+							<display type="self"/>
+						</entry>
+						<entry path="Kernel Status">
+							<display type="self"/>
+						</entry>
+					</entry>
+		    	</entry>
 			</entry>
-        </entry>
 		</entry>
 
 		<entry path="*">
