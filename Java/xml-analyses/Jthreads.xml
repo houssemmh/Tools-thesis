@@ -67,7 +67,7 @@
 		<entry path="*">
 			<display type="self"/>
 			<entry path="GC" displayText="true">
-				<entry path="Collections" displayText="true">
+				<entry path="*" displayText="true">
 					<display type="self"/>
 					<entry path="*" displayText="true">
 						<display type="self"/>
@@ -97,17 +97,8 @@
 		<entry path="CompilerThreads">
 			<display type="self"/>
 			<entry path="*" displayText="true">
-				<display type="self"/>
+				<display type="constant" value="User Status"/>
 				<name type="constant" value="name"/>
-				<entry path="User Status" displayText="true">
-					<display type="self"/>
-				</entry>
-				<entry path="info" displayText="true">
-					<display type="self"/>
-				</entry>
-				<entry path="Kernel Status">
-					<display type="self"/>
-				</entry>
 			</entry>
         </entry>
 		</entry>

@@ -56,6 +56,43 @@ TRACEPOINT_EVENT(
     )
 )
 
+
+TRACEPOINT_EVENT(
+    jvm,
+        mem__pool__gc__begin,
+    TP_ARGS(
+        int, tid,
+        int, pid,
+        char*, gc_name,
+        char*, pool_name
+
+    ),
+    TP_FIELDS(
+        ctf_integer(int, tid, tid)
+        ctf_integer(int, pid, pid)
+        ctf_string(gc_name, gc_name)
+        ctf_string(pool_name, pool_name)
+    )
+)
+
+TRACEPOINT_EVENT(
+    jvm,
+        mem__pool__gc__end,
+    TP_ARGS(
+        int, tid,
+        int, pid,
+        char*, gc_name,
+        char*, pool_name
+
+    ),
+    TP_FIELDS(
+        ctf_integer(int, tid, tid)
+        ctf_integer(int, pid, pid)
+        ctf_string(gc_name, gc_name)
+        ctf_string(pool_name, pool_name)
+    )
+)
+
 TRACEPOINT_EVENT(
     jvm,
         report_gc_start,
