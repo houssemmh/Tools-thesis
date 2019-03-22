@@ -1,0 +1,15 @@
+TRACEPOINT_EVENT(
+    // Tracepoint provider name
+    my_provider,
+
+    // Tracepoint/event name
+    my_event,
+
+    // Tracepoint arguments (input)
+    TP_ARGS(char *, text),
+
+    // Tracepoint/event fields (output)
+    TP_FIELDS(
+        ctf_string(message, text)
+    )
+)
