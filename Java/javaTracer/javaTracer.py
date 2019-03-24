@@ -53,6 +53,23 @@ struct gc_mempool_event_t {
     char pool_name[80];
 };
 
+struct compiler_event_t {
+    char event_name[80];
+    u32 tid;
+    u32 pid;
+    char compilerName[80];
+    char className[80];
+    char methodName[80];
+    char signature[80];
+};
+
+struct monitor_event_t {
+    char event_name[80];
+    u32 tid;
+    u32 pid;
+    char monitorName[80];
+};
+
 BPF_PERF_OUTPUT(threads);
 
 """
@@ -101,14 +118,76 @@ int %s(struct pt_regs *ctx) {
 }
 """
 
+compiler_template = """
+int %s(struct pt_regs *ctx) {
+    char event_name[] = "%s";
+    struct compiler_event_t te = {};
+    u64 compilerName_ptr = 0;
+    u64 className_ptr = 0;
+    u64 methodName_ptr = 0;
+    u64 signature_ptr = 0;
+    u64 id = bpf_get_current_pid_tgid();
+    u32 pid = id >> 32; // PID is higher part
+    u32 tid = id;       // Cast and get the lower part
+    te.tid = tid;
+    te.pid = pid;
+    bpf_usdt_readarg(1, ctx, &compilerName_ptr);
+    bpf_usdt_readarg(3, ctx, &className_ptr);
+    bpf_usdt_readarg(5, ctx, &methodName_ptr);
+    bpf_usdt_readarg(7, ctx, &signature_ptr);
+    bpf_probe_read(&te.compilerName, sizeof(te.compilerName), (void *)compilerName_ptr);
+    bpf_probe_read(&te.className, sizeof(te.className), (void *)className_ptr);
+    bpf_probe_read(&te.methodName, sizeof(te.methodName), (void *)methodName_ptr);
+    bpf_probe_read(&te.signature, sizeof(te.signature), (void *)signature_ptr);
+    __builtin_memcpy(&te.event_name, event_name, sizeof(te.event_name));
+    threads.perf_submit(ctx, &te, sizeof(te));
+    return 0;
+}
+"""
+
+monitor_template = """
+int %s(struct pt_regs *ctx) {
+    char event_name[] = "%s";
+    struct monitor_event_t te = {};
+    u64 monitorName_ptr = 0;
+    u64 id = bpf_get_current_pid_tgid();
+    u32 pid = id >> 32; // PID is higher part
+    u32 tid = id;       // Cast and get the lower part
+    te.tid = tid;
+    te.pid = pid;
+    bpf_usdt_readarg(3, ctx, &monitorName_ptr);
+    bpf_probe_read(&te.monitorName, sizeof(te.monitorName), (void *)monitorName_ptr);
+    __builtin_memcpy(&te.event_name, event_name, sizeof(te.event_name));
+    threads.perf_submit(ctx, &te, sizeof(te));
+    return 0;
+}
+"""
+
 program += thread_template % ("thread__start", "thread__start")
 program += thread_template % ("thread__stop", "thread__stop")
+usdt.enable_probe_or_bail("thread__start", "thread__start")
+usdt.enable_probe_or_bail("thread__stop", "thread__stop")
+
+
 program += gc_template % ("mem__pool__gc__begin", "mem__pool__gc__begin")
 program += gc_template % ("mem__pool__gc__end", "mem__pool__gc__end")
 usdt.enable_probe_or_bail("mem__pool__gc__begin", "mem__pool__gc__begin")
 usdt.enable_probe_or_bail("mem__pool__gc__end", "mem__pool__gc__end")
-usdt.enable_probe_or_bail("thread__start", "thread__start")
-usdt.enable_probe_or_bail("thread__stop", "thread__stop")
+
+program += compiler_template % ("method__compile__begin", "method__compile__begin")
+program += compiler_template % ("method__compile__end", "method__compile__end")
+usdt.enable_probe_or_bail("method__compile__begin", "method__compile__begin")
+usdt.enable_probe_or_bail("method__compile__end", "method__compile__end")
+
+program += monitor_template % ("monitor__waited", "monitor__waited")
+program += monitor_template % ("monitor__wait", "monitor__wait")
+program += monitor_template % ("monitor__contended__entered", "monitor__contended__entered")
+program += monitor_template % ("monitor__contended__enter", "monitor__contended__enter")
+usdt.enable_probe_or_bail("monitor__waited", "monitor__waited")
+usdt.enable_probe_or_bail("monitor__wait", "monitor__wait")
+usdt.enable_probe_or_bail("monitor__contended__entered", "monitor__contended__entered")
+usdt.enable_probe_or_bail("monitor__contended__enter", "monitor__contended__enter")
+
 
 if args.verbose:
     print(usdt.get_text())
@@ -144,13 +223,32 @@ class GCEvent(ct.Structure):
         ("pool_name", ct.c_char * 80),
         ]
 
+class CompilerEvent(ct.Structure):
+    _fields_ = [
+        ("event_name", ct.c_char * 80),
+        ("tid", ct.c_int32),
+        ("pid", ct.c_int32),
+        ("compilerName", ct.c_char * 80),
+        ("className", ct.c_char * 80),
+        ("methodName", ct.c_char * 80),
+        ("signature", ct.c_char * 80),
+        ]
+
+class MonitorEvent(ct.Structure):
+    _fields_ = [
+        ("event_name", ct.c_char * 80),
+        ("tid", ct.c_int32),
+        ("pid", ct.c_int32),
+        ("monitorName", ct.c_char * 80),
+        ]
+
 start_ts = time.time()
 
 def print_event(cpu, data, size):
     event = ct.cast(data, ct.POINTER(Event)).contents
     tid = int("%s" % event.tid)
     pid = int("%s" % event.pid)
-    print(event.event_name+ " " + str(tid) + " " + str(pid))
+    #print(event.event_name+ " " + str(tid) + " " + str(pid))
 
     if event.event_name == "thread__start":
         event = ct.cast(data, ct.POINTER(ThreadEvent)).contents
@@ -164,6 +262,25 @@ def print_event(cpu, data, size):
     if event.event_name == "mem__pool__gc__end":
         event = ct.cast(data, ct.POINTER(GCEvent)).contents
         tracepoint("mem__pool__gc__end", tid, pid, event.gc_name, event.pool_name)
+    if event.event_name == "method__compile__begin":
+        event = ct.cast(data, ct.POINTER(CompilerEvent)).contents
+        tracepoint("method__compile__begin", tid, pid, event.compilerName, event.className, event.methodName, event.signature)
+    if event.event_name == "method__compile__end":
+        event = ct.cast(data, ct.POINTER(CompilerEvent)).contents
+        tracepoint("method__compile__end", tid, pid, event.compilerName, event.className, event.methodName, event.signature)
+    if event.event_name == "monitor__wait":
+        event = ct.cast(data, ct.POINTER(MonitorEvent)).contents
+        tracepoint("monitor__wait", tid, pid, event.monitorName)
+    if event.event_name == "monitor__waited":
+        event = ct.cast(data, ct.POINTER(MonitorEvent)).contents
+        tracepoint("monitor__waited", tid, pid, event.monitorName)
+    if event.event_name == "monitor__contended__enter":
+        event = ct.cast(data, ct.POINTER(MonitorEvent)).contents
+        tracepoint("monitor__contended__enter", tid, pid, event.monitorName)
+    if event.event_name == "monitor__contended__entered":
+        event = ct.cast(data, ct.POINTER(MonitorEvent)).contents
+        tracepoint("monitor__contended__entered", tid, pid, event.monitorName)
+
 
 bpf["threads"].open_perf_buffer(print_event)
 while 1:

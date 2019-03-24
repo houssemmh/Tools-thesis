@@ -8,10 +8,10 @@
 		<definedValue name="VM Operation" value="1" color="#320048" />
 		<definedValue name="GC Operation" value="2" color="#a000e3" />
 		<definedValue name="Compiler Operation" value="3" color="#fbff3d" />
+		<definedValue name="Monitor" value="4" color="#ADD8E6" />
 		<definedValue name="Running" value="5" color="#2ca25f" />
+		<definedValue name="Contended Monitor" value="6" color="#ADD8E6" />
 		<definedValue name="Sleeping" value="225" color="#3a24ff" />
-		<definedValue name="Wait" value="401" color="#ADD8E6" />
-		<definedValue name="TimedWait" value="417" color="#ADD8E6" />
 		<definedValue name="WaitPark" value="657" color="#D3D3D3" />
 		<definedValue name="TimedWaitPark" value="673" color="#D3D3D3" />
 		<definedValue name="Blocked" value="1025" color="#ff1818" />
@@ -26,20 +26,8 @@
 		<entry path="JavaThreads">
 			<display type="self"/>
 			<entry path="*" displayText="true">
-				<display type="self"/>
+				<display type="constant" value="User Status"/>
 				<name type="constant" value="name"/>
-				<entry path="User Status" displayText="true">
-					<display type="self"/>
-				</entry>
-				<entry path="Contended" displayText="true">
-					<display type="self"/>
-				</entry>
-				<entry path="Monitor" displayText="true">
-					<display type="self"/>
-				</entry>
-				<entry path="Kernel Status">
-					<display type="self"/>
-				</entry>
 			</entry>
         </entry>
 		</entry>
@@ -93,14 +81,17 @@
 		</entry>
 
 		<entry path="*">
-		<display type="self"/>
-		<entry path="CompilerThreads">
 			<display type="self"/>
-			<entry path="*" displayText="true">
-				<display type="constant" value="User Status"/>
-				<name type="constant" value="name"/>
+			<entry path="CompilerThreads">
+				<display type="self"/>
+				<entry path="*">
+					<display type="self"/>
+					<entry path="*" displayText="true">
+						<display type="constant" value="status"/>
+						<name type="constant" value="name"/>
+					</entry>
+				</entry>
 			</entry>
-        </entry>
 		</entry>
     </timeGraphView>
 
