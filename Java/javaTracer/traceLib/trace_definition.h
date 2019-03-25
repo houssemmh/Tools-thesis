@@ -202,47 +202,6 @@ TRACEPOINT_EVENT(
 
 TRACEPOINT_EVENT(
     jvm,
-        report_gc_start,
-    TP_ARGS(
-        long, id,
-        long, name,
-        long, cause,
-        int, tid,
-        int, pid
-    ),
-    TP_FIELDS(
-        ctf_integer(long, id, id)
-        ctf_integer(long, name, name)
-        ctf_integer(long, cause, cause)
-        ctf_integer(int, tid, tid)
-        ctf_integer(int, pid, pid)
-    )
-)
-
-
-TRACEPOINT_EVENT(
-    jvm,
-        report_gc_end,
-    TP_ARGS(
-        long, id,
-        long, name,
-        long, cause,
-        int, tid,
-        int, pid
-    ),
-    TP_FIELDS(
-        ctf_integer(long, id, id)
-        ctf_integer(long, name, name)
-        ctf_integer(long, cause, cause)
-        ctf_integer(int, tid, tid)
-        ctf_integer(int, pid, pid)
-    )
-)
-
-
-
-TRACEPOINT_EVENT(
-    jvm,
         statedump_java_thread,
     TP_ARGS(
         int, tid,

@@ -7,47 +7,21 @@
 		
 		<definedValue name="VM Operation" value="1" color="#320048" />
 		<definedValue name="GC Operation" value="2" color="#a000e3" />
-		<definedValue name="Compiler Operation" value="3" color="#fbff3d" />
-		<definedValue name="Monitor" value="4" color="#ADD8E6" />
-		<definedValue name="Running" value="5" color="#2ca25f" />
-		<definedValue name="Contended Monitor" value="6" color="#ADD8E6" />
-		<definedValue name="Sleeping" value="225" color="#3a24ff" />
-		<definedValue name="WaitPark" value="657" color="#D3D3D3" />
-		<definedValue name="TimedWaitPark" value="673" color="#D3D3D3" />
-		<definedValue name="Blocked" value="1025" color="#ff1818" />
+		<definedValue name="Compiler Operation" value="3" color="#ff0000" />
+		<definedValue name="Monitor" value="4" color="#C8C800" />
+		<definedValue name="Running" value="5" color="#00C800" />
+		<definedValue name="Contended Monitor" value="6" color="#C86C00" />
+		<definedValue name="WaitPark" value="7" color="#D3D3D3" />
+		<definedValue name="Sleeping" value="8" color="#3a24ff" />
 
-
-		<definedValue name="Running" value="1001" color="#00C800" />
-		<definedValue name="Wait Blocked" value="1002" color="#C8C800" />
-		<definedValue name="Other Process" value="1003" color="#ccffcc" />
 
 		<entry path="*">
 		<display type="self"/>
 		<entry path="Threads">
 			<display type="self"/>
-			<entry path="*" displayText="true">
+			<entry path="*">
 				<display type="constant" value="User Status"/>
 				<name type="constant" value="name"/>
-			</entry>
-        </entry>
-		</entry>
-
-		<entry path="*">
-		<display type="self"/>
-		<entry path="VMThreads">
-			<display type="self"/>
-			<entry path="*" displayText="true">
-				<display type="self"/>
-				<name type="constant" value="name"/>
-				<entry path="User Status" displayText="true">
-					<display type="self"/>
-				</entry>
-				<entry path="info" displayText="true">
-					<display type="self"/>
-				</entry>
-				<entry path="Kernel Status">
-					<display type="self"/>
-				</entry>
 			</entry>
         </entry>
 		</entry>
@@ -57,7 +31,7 @@
 			<entry path="Garbage Collection" displayText="true">
 				<entry path="*" displayText="true">
 					<display type="self"/>
-					<entry path="*" displayText="true">
+					<entry path="*">
 						<display type="self"/>
 					</entry>
 				</entry>
@@ -66,7 +40,7 @@
 					<entry path="*" displayText="true">
 						<display type="self"/>
 						<name type="constant" value="name"/>
-						<entry path="User Status" displayText="true">
+						<entry path="User Status">
 							<display type="self"/>
 						</entry>
 						<entry path="info" displayText="true">
@@ -86,7 +60,7 @@
 				<display type="self"/>
 				<entry path="*">
 					<display type="self"/>
-					<entry path="*" displayText="true">
+					<entry path="*">
 						<display type="constant" value="status"/>
 						<name type="constant" value="name"/>
 					</entry>
@@ -112,6 +86,28 @@
 			<display type="self"/>
 			<entry path="*" displayText="true">
 				<display type="constant" value="status"/>
+			</entry>
+		</entry>
+    </timeGraphView>
+
+
+	<timeGraphView id="my.test.time.graph.view.JIT Compiler">
+        <head>
+            <analysis id="org.eclipse.tracecompass.incubator.java.analysis.core.javaanalysismodule" />
+            <label value="JIT Compiler" />
+        </head>
+
+		<entry path="*">
+			<display type="self"/>
+			<entry path="JIT Compilation">
+				<display type="self"/>
+				<entry path="*">
+					<display type="self"/>
+					<entry path="*" displayText="true">
+						<display type="constant" value="functionName"/>
+						<name type="constant" value="name"/>
+					</entry>
+				</entry>
 			</entry>
 		</entry>
     </timeGraphView>
