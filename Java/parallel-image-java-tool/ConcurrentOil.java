@@ -273,9 +273,11 @@ public class ConcurrentOil {
         System.err.println("Invalid # threads");
         System.exit(1);
       }
+	while(true){
       imageOiler.load();
       imageOiler.process(radius, numThreads);
       imageOiler.save();
+	}
     }
     catch (IOException e) {
       e.printStackTrace();

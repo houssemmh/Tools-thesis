@@ -1,0 +1,13 @@
+#!/bin/bash
+
+$1 &
+commandPID=$!
+sleep 1
+kill -STOP $commandPID
+echo $commandPID
+sudo ./javaTracer.py $commandPID
+#kill -CONT $!
+
+
+
+jstack -l 23461

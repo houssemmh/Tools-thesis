@@ -26,3 +26,9 @@ def tracepoint(tracepoint_name, *trace_arguments):
 	if (tracepoint_name == "monitor__contended__entered"):
 		lib.trace_monitor__contended__entered(*trace_arguments);
 
+	if (tracepoint_name == "statedump_java_thread"):
+		lib.trace_statedump_java_thread(*trace_arguments);
+
+
+#TODO : thread__sleep__begin thread__sleep__end thread__park__begin thread__park__end vmops__begin vmops__end
+

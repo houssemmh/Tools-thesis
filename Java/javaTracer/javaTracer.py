@@ -20,7 +20,10 @@ from bcc import BPF, USDT, utils
 import ctypes as ct
 import time
 import os
+from subprocess import check_output
+import re
 
+username ="houssemmh"
 examples = """examples:
     ./javathreads 12245         # trace the process 12245
 """
@@ -32,6 +35,20 @@ parser.add_argument("pid", type=int, help="process id to attach to")
 parser.add_argument("-v", "--verbose", action="store_true",
     help="verbose mode: print the BPF program (for debugging purposes)")
 args = parser.parse_args()
+
+#STATEDUMP THREADS
+out = check_output(["su", "-c", "jstack "+ str(args.pid), username]).split('\n')
+
+for line in out:
+    if re.search("nid=", line):
+        m = re.search('nid=(.+?) ', line)
+        if m:
+            tid = int(m.group(1), 16)
+            java_thread_name = line.split('" ')[0][1:]
+            tracepoint("statedump_java_thread", tid, args.pid, java_thread_name)
+            print("{} {} {}".format(tid, args.pid,java_thread_name))
+
+#EBPF TRACING
 
 usdt = USDT(pid=args.pid)
 

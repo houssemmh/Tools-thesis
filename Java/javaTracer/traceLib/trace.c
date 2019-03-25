@@ -83,3 +83,9 @@ int trace_monitor__contended__entered(long tid, long pid, char* monitorName)
    tracepoint(jvm, monitor__contended__entered, tid, pid, monitorName);
    return 0;
 }
+
+int trace_statedump_java_thread(long tid, long pid,char* threadName)
+{
+   tracepoint(jvm, statedump_java_thread, tid, pid, threadName);
+   return 0;
+}

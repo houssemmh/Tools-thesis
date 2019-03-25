@@ -23,7 +23,7 @@
 
 		<entry path="*">
 		<display type="self"/>
-		<entry path="JavaThreads">
+		<entry path="Threads">
 			<display type="self"/>
 			<entry path="*" displayText="true">
 				<display type="constant" value="User Status"/>
@@ -54,14 +54,14 @@
 
 		<entry path="*">
 			<display type="self"/>
-			<entry path="GC" displayText="true">
+			<entry path="Garbage Collection" displayText="true">
 				<entry path="*" displayText="true">
 					<display type="self"/>
 					<entry path="*" displayText="true">
 						<display type="self"/>
 					</entry>
 				</entry>
-				<entry path="GCThreads" displayText="true">
+				<entry path="Garbage Collection" displayText="true">
 					<display type="self"/>
 					<entry path="*" displayText="true">
 						<display type="self"/>
@@ -82,7 +82,7 @@
 
 		<entry path="*">
 			<display type="self"/>
-			<entry path="CompilerThreads">
+			<entry path="JIT Compilation">
 				<display type="self"/>
 				<entry path="*">
 					<display type="self"/>

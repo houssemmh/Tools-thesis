@@ -240,6 +240,23 @@ TRACEPOINT_EVENT(
 )
 
 
+
+TRACEPOINT_EVENT(
+    jvm,
+        statedump_java_thread,
+    TP_ARGS(
+        int, tid,
+        int, pid,
+        char*, threadName
+    ),
+    TP_FIELDS(
+        ctf_integer(int, tid, tid)
+        ctf_integer(int, pid, pid)
+        ctf_string(threadName, threadName)
+    )
+)
+
+
 #endif /* TRACE_DEFINITION_H */
 
 #include <lttng/tracepoint-event.h>
